@@ -164,7 +164,7 @@ roslaunch realsense2_camera rs_rgbd.launch
 roscore
 ```
 ```
-rosrun ORB_SLAM3 Mono_Inertial /home/zhang/catkin_ws/src/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/zhang/catkin_ws/src/ORB_SLAM3/Examples/Monocular-Inertial/TUM_512_far.yaml
+rosrun ORB_SLAM3 Mono_Inertial /home/zhang/catkin_ws/src/ORB_SLAM3/Vocabulary/ORBvoc.txt /home/zhang/catkin_ws/src/ORB_SLAM3/Examples/Monocular-Inertial/L515VI.yaml
 ```
 ```
 roslaunch realsense2_camera rs_camera.launch
