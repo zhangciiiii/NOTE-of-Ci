@@ -98,7 +98,7 @@ bounding_boxes:
 https://blog.csdn.net/weixin_28930461/article/details/110530853 \
 https://github.com/leggedrobotics/darknet_ros/issues/190
 
-### 开始动手：
+### 开始动手，重新安装：
 心态崩了，安装ROS—Yolo后ORB3崩了，结果安装ORB3一直失败，后面莫名其妙好了。再去安装ROS-Yolo又一直失败。记录一下失败内容。
 
 #### 1. 显卡算力与CMakeLists里面不匹配
@@ -125,4 +125,26 @@ if(NOT "include;/usr/local/include/opencv" STREQUAL " ")
 使用下述编译命令：
 ```
 catkin build darknet_ros --cmake-args -DCMAKE_CXX_FLAGS=-DCV__ENABLE_C_API_CTORS
+```
+
+
+### 修改Example中的VI.cc
+
+1. 引用 #include <darknet_ros_msgs/BoundingBoxes.h>
+在编译Dark_net后，生成 devel/include 里面有这个darknet_ros_msgs头文件文件夹。
+
+2. 编写回调函数 
+就是在 n.subscribe 的第三个参数调用的，现在是
+```
+void ImageGrabber::BoxGrabber(const darknet_ros_msgs::BoundingBoxes::ConstPtr& msg)
+{
+  if(true)
+  {
+    cout<< "!!!!"<<msg->bounding_boxes[0].xmin << endl;
+  }
+}
+```
+调用
+```
+ros::Subscriber sub_boxes = n.subscribe("/darknet_ros/bounding_boxes", 100, &ImageGrabber::BoxGrabber,&igb);
 ```
