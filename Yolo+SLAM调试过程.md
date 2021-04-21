@@ -95,6 +95,34 @@ bounding_boxes:
 ```
 
 ### 如何利用名为 /darknet_ros/bounding_boxes 的话题
-https://blog.csdn.net/weixin_28930461/article/details/110530853
+https://blog.csdn.net/weixin_28930461/article/details/110530853 \
 https://github.com/leggedrobotics/darknet_ros/issues/190
 
+### 开始动手：
+心态崩了，安装ROS—Yolo后ORB3崩了，结果安装ORB3一直失败，后面莫名其妙好了。再去安装ROS-Yolo又一直失败。记录一下失败内容。
+
+#### 1. 显卡算力与CMakeLists里面不匹配
+看Darknet官网有解决方法，改CMakeLists
+
+#### 2. Project 'cv_bridge' specifies '/usr/include/opencv' as an include dir, which is not found
+将下述文件修改以下：
+/opt/ros/melodic/share/cv_bridge/cmake/cv_bridgeConfig.cmake
+```
+set(cv_bridge_FOUND_CATKIN_PROJECT TRUE)
+if(NOT "include;/usr/include;/usr/include/opencv " STREQUAL " ")
+  set(cv_bridge_INCLUDE_DIRS "")
+  set(_include_dirs "include;/usr/include;/usr/include/opencv")
+```
+改为
+```
+set(cv_bridge_FOUND_CATKIN_PROJECT TRUE)
+if(NOT "include;/usr/local/include/opencv" STREQUAL " ")
+  set(cv_bridge_INCLUDE_DIRS "")
+  set(_include_dirs "/usr/local/include/opencv;/usr/include;/usr/local/include")
+```
+
+#### 3. 编译时报错 no matching function for call to ‘_IplImage::_IplImage(cv::Mat&)’
+使用下述编译命令：
+```
+catkin build darknet_ros --cmake-args -DCMAKE_CXX_FLAGS=-DCV__ENABLE_C_API_CTORS
+```
