@@ -127,6 +127,14 @@ if(NOT "include;/usr/local/include/opencv" STREQUAL " ")
 catkin build darknet_ros --cmake-args -DCMAKE_CXX_FLAGS=-DCV__ENABLE_C_API_CTORS
 ```
 
+### 新BUG：undefined symbol: _ZN5DBoW24FORB1LE 
+吓死了，网上说要重装系统，但是看到靠谱的，把/usr下和DBOW2有关的文件全删除就ok了
+
+### 如何利用时间同步：
+https://github.com/leggedrobotics/darknet_ros/issues/63
+
+暂时的想法：对比了两者可视化的结果，感觉图像几乎没有时间差，决定暂时先不管同步问题了，因为时间也不太够。
+
 
 ### 修改Example中的VI.cc
 
@@ -148,3 +156,13 @@ void ImageGrabber::BoxGrabber(const darknet_ros_msgs::BoundingBoxes::ConstPtr& m
 ```
 ros::Subscriber sub_boxes = n.subscribe("/darknet_ros/bounding_boxes", 100, &ImageGrabber::BoxGrabber,&igb);
 ```
+
+### 4-24成功的版本
+改动内容：
+1. 将GrabBox写成了一个类，ImageGrabber包含该类的成员。
+
+2. 编写Mask生成函数，仅粗略生成mask，对所有识别的对象都将其mask。
+
+3. 改写frame类的构造函数，可根据mask删除落入其中的特征点。
+
+4. 可根据yaml文件确认是否调用yolo网络。
